@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Social</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- From Uiverse.io by Na3ar-17 --> 
+<div class="container">
+  <label class="label">
+    <input type="checkbox" class="input" />
+    <span class="circle"
+      ><svg
+        class="icon"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          d="M12 19V5m0 14-4-4m4 4 4-4"
+        ></path>
+      </svg>
+      <div class="square"></div>
+    </span>
+    <p class="title">Download</p>
+    <p class="title">Open</p>
+  </label>
+</div>
+
+<script>
+  document.querySelector(".input").addEventListener("change", function() {
+    if (this.checked) {
+      setTimeout(() => {
+        window.location.href = "https://www.mediafire.com/file/1psrwwdtqgskfd0/%25F0%259D%2591%25AD%25F0%259D%2591%25A8%25F0%259D%2591%25B2%25F0%259D%2591%25AC_%25F0%259D%2591%25B3%25F0%259D%2591%25A8%25F0%259D%2591%25AE_%25F0%259D%2591%25B4%25F0%259D%2591%25B6%25F0%259D%2591%25AB%25F0%259D%2591%25B0%25F0%259D%2591%25AD%25F0%259D%2592%2580_%25F0%259D%2591%25B5%25F0%259D%2591%25B0%25F0%259D%2591%25B5%25F0%259D%2591%25B1%25F0%259D%2591%25A8_%25F0%259F%25A5%25B6.apk/file"; // เปลี่ยนลิงก์ตรงนี้
+      }, 4000); // หน่วง 4 วิ (ให้ animation เล่นก่อน)
+    }
+  });
+</script>

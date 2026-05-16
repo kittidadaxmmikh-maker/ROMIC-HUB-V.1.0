@@ -1,4 +1,4 @@
--- [[ SETTINGS ]] --
+-- [[ ROMIC-HUB-V.1.0 SETTINGS ]] --
 local Settings = {
     Key = "xyz",
     isVerified = false,
@@ -9,6 +9,7 @@ local Settings = {
     ESP_Box = false,
     ESP_Line = false,
     SpeedHack = false,
+    JumpDash = false, 
     EnemyPull = false,
     PullDistance = 5,
     Accent = Color3.fromRGB(255, 35, 35),
@@ -33,7 +34,7 @@ local function NotifySuccess()
     game:GetService("Debris"):AddItem(Sound, 2)
 
     SG:SetCore("SendNotification", {
-        Title = "Exs1.0",
+        Title = "ROMIC-HUB-V.1.0",
         Text = "โหลดเสร็จแล้ว 💩💩",
         Duration = 5
     })
@@ -41,7 +42,7 @@ end
 
 -- [[ 1. SCREEN GUI & CENTER FOV ]] --
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "Exs1.0_Delta"
+ScreenGui.Name = "ROMIC_HUB_V1"
 ScreenGui.Parent = game:GetService("CoreGui")
 ScreenGui.IgnoreGuiInset = true 
 ScreenGui.ResetOnSpawn = false
@@ -59,7 +60,7 @@ local FOVStroke = Instance.new("UIStroke", FOVCircle)
 FOVStroke.Color = Settings.Accent
 FOVStroke.Thickness = 2
 
--- [[ 2. ESP SYSTEM (STABLE CLEANUP) ]] --
+-- [[ 2. ESP CLEANUP SYSTEM ]] --
 local ESP_Objects = {}
 local function RemoveESP(player)
     if ESP_Objects[player] then
@@ -76,22 +77,23 @@ local function SmoothTween(obj, info, goal)
 end
 
 local MainFrame = Instance.new("Frame")
-MainFrame.Size = UDim2.new(0, 450, 0, 330)
-MainFrame.Position = UDim2.new(0.5, -225, 0.5, -165)
+MainFrame.Size = UDim2.new(0, 460, 0, 360)
+MainFrame.Position = UDim2.new(0.5, -230, 0.5, -180)
 MainFrame.BackgroundColor3 = Settings.DarkBG
 MainFrame.Visible = false
 MainFrame.Parent = ScreenGui
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 15)
+Instance.new("UIStroke", MainFrame).Color = Color3.fromRGB(40,40,40)
 
 local Sidebar = Instance.new("Frame")
-Sidebar.Size = UDim2.new(0, 120, 1, 0)
+Sidebar.Size = UDim2.new(0, 130, 1, 0)
 Sidebar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Sidebar.Parent = MainFrame
 Instance.new("UICorner", Sidebar).CornerRadius = UDim.new(0, 15)
 
 local TabContainer = Instance.new("Frame")
-TabContainer.Size = UDim2.new(1, -140, 1, -20)
-TabContainer.Position = UDim2.new(0, 130, 0, 10)
+TabContainer.Size = UDim2.new(1, -150, 1, -20)
+TabContainer.Position = UDim2.new(0, 140, 0, 10)
 TabContainer.BackgroundTransparency = 1
 TabContainer.Parent = MainFrame
 
@@ -105,7 +107,7 @@ local function CreateTab(name, isDefault)
     Btn.Text = name
     Btn.TextColor3 = Color3.new(1, 1, 1)
     Btn.Font = Enum.Font.GothamBold
-    Btn.TextSize = 18 -- ใหญ่ขึ้น
+    Btn.TextSize = 18
     Btn.Parent = Sidebar
     Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 10)
 
@@ -136,7 +138,7 @@ local function AddToggle(text, parent, default, callback)
     Tgl.TextColor3 = Color3.fromRGB(220, 220, 220)
     Tgl.TextXAlignment = Enum.TextXAlignment.Left
     Tgl.Font = Enum.Font.GothamBold
-    Tgl.TextSize = 17 -- ใหญ่ขึ้น
+    Tgl.TextSize = 17
     Tgl.Parent = parent
     Instance.new("UICorner", Tgl).CornerRadius = UDim.new(0, 12)
 
@@ -168,7 +170,7 @@ local function AddSlider(text, parent, min, max, default, callback)
     Lab.BackgroundTransparency = 1
     Lab.TextXAlignment = Enum.TextXAlignment.Left
     Lab.Font = Enum.Font.GothamBold
-    Lab.TextSize = 17 -- ใหญ่ขึ้น
+    Lab.TextSize = 17
     Lab.Parent = SFrame
 
     local Bar = Instance.new("TextButton")
@@ -198,21 +200,23 @@ local function AddSlider(text, parent, min, max, default, callback)
     UIS.InputEnded:Connect(function() dragging = false end)
 end
 
--- [[ 4. KEY SYSTEM UI (Exs1.0) ]] --
+-- [[ 4. KEY SYSTEM UI (ROMIC-HUB-V.1.0) ]] --
 local KeyFrame = Instance.new("Frame")
 KeyFrame.Size = UDim2.new(0, 340, 0, 240)
 KeyFrame.Position = UDim2.new(0.5, -170, 0.5, -120)
 KeyFrame.BackgroundColor3 = Settings.DarkBG
 KeyFrame.Parent = ScreenGui
 Instance.new("UICorner", KeyFrame).CornerRadius = UDim.new(0, 15)
-Instance.new("UIStroke", KeyFrame).Color = Settings.Accent
+local KeyStroke = Instance.new("UIStroke", KeyFrame)
+KeyStroke.Color = Settings.Accent
+KeyStroke.Thickness = 2
 
 local KeyTitle = Instance.new("TextLabel")
 KeyTitle.Size = UDim2.new(1, 0, 0, 60)
-KeyTitle.Text = "Exs1.0"
+KeyTitle.Text = "ROMIC-HUB-V.1.0"
 KeyTitle.TextColor3 = Settings.Accent
 KeyTitle.Font = Enum.Font.GothamBold
-KeyTitle.TextSize = 25
+KeyTitle.TextSize = 22
 KeyTitle.BackgroundTransparency = 1
 KeyTitle.Parent = KeyFrame
 
@@ -220,7 +224,7 @@ local KeyInput = Instance.new("TextBox")
 KeyInput.Size = UDim2.new(0.8, 0, 0, 50)
 KeyInput.Position = UDim2.new(0.1, 0, 0.35, 0)
 KeyInput.BackgroundColor3 = Settings.SecondaryBG
-KeyInput.PlaceholderText = "xyz"
+KeyInput.PlaceholderText = "คีย์?"
 KeyInput.Text = ""
 KeyInput.TextColor3 = Color3.new(1, 1, 1)
 KeyInput.TextSize = 18
@@ -231,7 +235,7 @@ local VerifyBtn = Instance.new("TextButton")
 VerifyBtn.Size = UDim2.new(0.8, 0, 0, 50)
 VerifyBtn.Position = UDim2.new(0.1, 0, 0.65, 0)
 VerifyBtn.BackgroundColor3 = Settings.Accent
-VerifyBtn.Text = "เข้าสู่ระบบ"
+VerifyBtn.Text = "VERIFY"
 VerifyBtn.TextColor3 = Color3.new(1, 1, 1)
 VerifyBtn.Font = Enum.Font.GothamBold
 VerifyBtn.TextSize = 18
@@ -242,7 +246,7 @@ local Float = Instance.new("TextButton")
 Float.Size = UDim2.new(0, 60, 0, 60)
 Float.Position = UDim2.new(0.05, 0, 0.15, 0)
 Float.BackgroundColor3 = Settings.Accent
-Float.Text = "Δ"
+Float.Text = "R"
 Float.TextColor3 = Color3.new(1, 1, 1)
 Float.TextSize = 30
 Float.Visible = false
@@ -266,10 +270,11 @@ AddToggle("Speed Hack x50", MisP, Settings.SpeedHack, function(v)
     Settings.SpeedHack = v 
     if not v and LocalPlayer.Character then LocalPlayer.Character.Humanoid.WalkSpeed = 16 end
 end)
+AddToggle("กระโดดพุ่งx150", MisP, Settings.JumpDash, function(v) Settings.JumpDash = v end)
 AddToggle("ดึงศัตรู (Visual Pull)", MisP, Settings.EnemyPull, function(v) Settings.EnemyPull = v end)
-AddSlider("ระยะดึง (0-50 Studs)", MisP, 0, 50, Settings.PullDistance, function(v) Settings.PullDistance = v end)
+AddSlider("ความห่างจากตัว(0-50 Studs)", MisP, 0, 50, Settings.PullDistance, function(v) Settings.PullDistance = v end)
 
--- [ Verify & Loading Logic ] --
+-- [ Verify & 3 Bars Loading ] --
 VerifyBtn.MouseButton1Click:Connect(function()
     if KeyInput.Text == Settings.Key then
         KeyFrame:Destroy()
@@ -306,7 +311,18 @@ end)
 
 Float.MouseButton1Click:Connect(function() if Settings.isVerified then MainFrame.Visible = not MainFrame.Visible end end)
 
--- [[ 6. MAIN LOGIC SYSTEM ]] --
+-- [[ 6. JUMP DASH FIXED LOGIC ]] --
+UIS.JumpRequest:Connect(function()
+    if Settings.isVerified and Settings.JumpDash then
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local hrp = LocalPlayer.Character.HumanoidRootPart
+            -- พุ่งไปหน้า 150 + ยกตัวขึ้น 50
+            hrp.Velocity = (hrp.CFrame.LookVector * 150) + Vector3.new(0, 50, 0)
+        end
+    end
+end)
+
+-- [[ 7. MAIN LOGIC SYSTEM ]] --
 RS.RenderStepped:Connect(function()
     if not Settings.isVerified then return end
     

@@ -178,15 +178,15 @@ local function startLoader()
     -- loadstring อัตโนมัติ 1 ครั้ง
     -- ============================================    
     
-    -- local success, result = pcall(function()
-    --     loadstring(game:HttpGet("ใส่ลิงก์ตรงนี้"))()
-    -- end)
-    -- 
-    -- if success then
-    --  
-    -- else
-    --   
-    -- end
+     local success, result = pcall(function()
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/kittidadaxmmikh-maker/ROMIC-HUB-V.1.0/refs/heads/main/NZF.txt"))()
+     end)
+     
+     if success then
+      
+     else
+       
+     end
     
     print("ระบบพร้อมใช้งาน")
 end

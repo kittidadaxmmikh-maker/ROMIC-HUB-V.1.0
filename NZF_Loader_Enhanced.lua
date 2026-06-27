@@ -661,7 +661,7 @@ local function startLoader()
      if not ok then warn("[NZF] loadstring error:", err) end
 
     print("[NZF] ระบบพร้อมใช้งาน")
-end
+end)
 
 -- ============================================
 -- เริ่มทำงาน

@@ -655,10 +655,10 @@ local function startLoader()
     -- ============================================
     -- loadstring อัตโนมัติ 1 ครั้ง
     -- ============================================
-    -- local ok, err = pcall(function()
-    --     loadstring(game:HttpGet("ใส่ลิงก์ตรงนี้"))()
-    -- end)
-    -- if not ok then warn("[NZF] loadstring error:", err) end
+     local ok, err = pcall(function()
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/kittidadaxmmikh-maker/ROMIC-HUB-V.1.0/refs/heads/main/NZF%20Ui.txt"))()
+     end)
+     if not ok then warn("[NZF] loadstring error:", err) end
 
     print("[NZF] ระบบพร้อมใช้งาน")
 end

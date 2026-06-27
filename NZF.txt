@@ -1,0 +1,394 @@
+-- ============================================
+-- NZF UI CLEAR - โปร่งใส เห็นชัด
+-- ============================================
+
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local Settings = { 
+    SpeedEnabled = false, 
+    ESPEnabled = false, 
+    WalkSpeedValue = 30 
+}
+
+-- ============================================
+-- สร้าง GUI
+-- ============================================
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "NZF_UI"
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ResetOnSpawn = false
+
+-- ============================================
+-- ปุ่มเปิด UI (ตัว F)
+-- ============================================
+local ToggleBtn = Instance.new("TextButton")
+ToggleBtn.Name = "ToggleBtn"
+ToggleBtn.Size = UDim2.new(0, 60, 0, 60)
+ToggleBtn.Position = UDim2.new(0.05, 0, 0.5, -30)
+ToggleBtn.BackgroundTransparency = 1
+ToggleBtn.Text = "F"
+ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleBtn.TextSize = 40
+ToggleBtn.Font = Enum.Font.GothamBold
+ToggleBtn.ZIndex = 100
+ToggleBtn.Parent = ScreenGui
+
+-- วงแหวน
+local ring = Instance.new("ImageLabel")
+ring.Name = "Ring"
+ring.Size = UDim2.new(1.6, 0, 1.6, 0)
+ring.Position = UDim2.new(-0.3, 0, -0.3, 0)
+ring.BackgroundTransparency = 1
+ring.Image = "rbxassetid://6031091150"
+ring.ImageColor3 = Color3.fromRGB(200, 200, 220)
+ring.ImageTransparency = 0.5
+ring.ZIndex = 99
+ring.Parent = ToggleBtn
+
+-- ============================================
+-- Main Frame (โปร่งใส เห็นชัด)
+-- ============================================
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 360, 0, 400)
+MainFrame.Position = UDim2.new(0.5, -180, 0.5, -200)
+MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MainFrame.BackgroundTransparency = 0.3
+MainFrame.BorderSizePixel = 0
+MainFrame.Visible = false
+MainFrame.ZIndex = 50
+MainFrame.Parent = ScreenGui
+
+-- มุมโค้ง
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 20)
+mainCorner.Parent = MainFrame
+
+-- ขอบเรืองแสงบางๆ
+local border = Instance.new("Frame")
+border.Name = "Border"
+border.Size = UDim2.new(1, 0, 1, 0)
+border.BackgroundTransparency = 1
+border.ZIndex = 2
+border.Parent = MainFrame
+
+local borderGrad = Instance.new("UIGradient")
+borderGrad.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(100, 200, 255)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(200, 100, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 200, 255))
+})
+borderGrad.Rotation = 90
+border.BackgroundColor3 = Color3.fromRGB(100, 200, 255)
+border.BackgroundTransparency = 0.15
+
+-- ============================================
+-- หัวข้อ NZF
+-- ============================================
+local TitleFrame = Instance.new("Frame")
+TitleFrame.Size = UDim2.new(1, 0, 0, 70)
+TitleFrame.Position = UDim2.new(0, 0, 0, 0)
+TitleFrame.BackgroundTransparency = 1
+TitleFrame.ZIndex = 3
+TitleFrame.Parent = MainFrame
+
+local Title = Instance.new("TextLabel")
+Title.Name = "Title"
+Title.Size = UDim2.new(1, 0, 1, 0)
+Title.BackgroundTransparency = 1
+Title.Text = ""
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 50
+Title.Font = Enum.Font.GothamBold
+Title.TextXAlignment = Enum.TextXAlignment.Center
+Title.TextYAlignment = Enum.TextYAlignment.Center
+Title.ZIndex = 4
+Title.Parent = TitleFrame
+
+-- เส้นแบ่ง
+local divider = Instance.new("Frame")
+divider.Size = UDim2.new(0.9, 0, 0, 2)
+divider.Position = UDim2.new(0.05, 0, 1, -5)
+divider.BackgroundColor3 = Color3.fromRGB(100, 200, 255)
+divider.BackgroundTransparency = 0.4
+divider.ZIndex = 3
+divider.Parent = TitleFrame
+
+-- ============================================
+-- ฟังก์ชันอนิเมชั่น NZF
+-- ============================================
+local function animateTitle()
+    local text = "NZF"
+    Title.Text = ""
+    for i = 1, #text do
+        Title.Text = text:sub(1, i)
+        Title.TextTransparency = 1
+        for t = 1, 10 do
+            local progress = t / 10
+            Title.TextTransparency = 1 - progress
+            Title.Size = UDim2.new(1 - (0.1 * (1 - progress)), 0, 1, 0)
+            task.wait(0.03)
+        end
+        Title.TextTransparency = 0
+        Title.Size = UDim2.new(1, 0, 1, 0)
+        task.wait(0.15)
+    end
+end
+
+-- ============================================
+-- ช่องใส่ค่าความเร็ว
+-- ============================================
+local SpeedFrame = Instance.new("Frame")
+SpeedFrame.Size = UDim2.new(0.85, 0, 0, 45)
+SpeedFrame.Position = UDim2.new(0.075, 0, 0, 85)
+SpeedFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SpeedFrame.BackgroundTransparency = 0.85
+SpeedFrame.BorderSizePixel = 0
+SpeedFrame.ZIndex = 3
+SpeedFrame.Parent = MainFrame
+
+local speedCorner = Instance.new("UICorner")
+speedCorner.CornerRadius = UDim.new(0, 10)
+speedCorner.Parent = SpeedFrame
+
+local SpeedIcon = Instance.new("TextLabel")
+SpeedIcon.Size = UDim2.new(0, 40, 1, 0)
+SpeedIcon.BackgroundTransparency = 1
+SpeedIcon.Text = "⚡"
+SpeedIcon.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedIcon.TextSize = 20
+SpeedIcon.Font = Enum.Font.GothamBold
+SpeedIcon.TextXAlignment = Enum.TextXAlignment.Center
+SpeedIcon.ZIndex = 4
+SpeedIcon.Parent = SpeedFrame
+
+local SpeedInput = Instance.new("TextBox")
+SpeedInput.Name = "SpeedInput"
+SpeedInput.Size = UDim2.new(1, -50, 1, 0)
+SpeedInput.Position = UDim2.new(0, 45, 0, 0)
+SpeedInput.BackgroundTransparency = 1
+SpeedInput.Text = "30"
+SpeedInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedInput.TextSize = 18
+SpeedInput.Font = Enum.Font.GothamBold
+SpeedInput.TextXAlignment = Enum.TextXAlignment.Left
+SpeedInput.PlaceholderText = "ตั้งค่าความเร็ว"
+SpeedInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 180)
+SpeedInput.ClearTextOnFocus = false
+SpeedInput.ZIndex = 4
+SpeedInput.Parent = SpeedFrame
+
+SpeedInput.FocusLost:Connect(function()
+    if tonumber(SpeedInput.Text) then 
+        Settings.WalkSpeedValue = tonumber(SpeedInput.Text)
+    end
+end)
+
+-- ============================================
+-- ฟังก์ชันสร้างปุ่ม Toggle (โปร่งใส)
+-- ============================================
+local function CreateToggleButton(name, yPos, callback)
+    local btn = Instance.new("ImageButton")
+    btn.Size = UDim2.new(0.85, 0, 0, 55)
+    btn.Position = UDim2.new(0.075, 0, 0, yPos)
+    btn.BackgroundColor3 = Color3.fromRGB(20, 20, 40)
+    btn.BackgroundTransparency = 0.5
+    btn.BorderSizePixel = 0
+    btn.ZIndex = 3
+    btn.Parent = MainFrame
+    
+    local btnCorner = Instance.new("UICorner")
+    btnCorner.CornerRadius = UDim.new(0, 12)
+    btnCorner.Parent = btn
+    
+    -- ไอคอน
+    local icon = Instance.new("TextLabel")
+    icon.Size = UDim2.new(0, 40, 1, 0)
+    icon.Position = UDim2.new(0, 12, 0, 0)
+    icon.BackgroundTransparency = 1
+    icon.Text = name == "Speed" and "🏃" or "👁️"
+    icon.TextColor3 = Color3.fromRGB(255, 255, 255)
+    icon.TextSize = 20
+    icon.Font = Enum.Font.GothamBold
+    icon.TextXAlignment = Enum.TextXAlignment.Center
+    icon.ZIndex = 4
+    icon.Parent = btn
+    
+    -- ชื่อปุ่ม
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, -70, 1, 0)
+    label.Position = UDim2.new(0, 55, 0, 0)
+    label.BackgroundTransparency = 1
+    label.Text = name .. " : OFF"
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.TextSize = 18
+    label.Font = Enum.Font.GothamBold
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.TextYAlignment = Enum.TextYAlignment.Center
+    label.ZIndex = 4
+    label.Parent = btn
+    
+    -- สถานะ
+    local state = false
+    
+    btn.MouseButton1Click:Connect(function()
+        state = not state
+        callback(state)
+        
+        label.Text = name .. (state and " : ON" or " : OFF")
+        btn.BackgroundColor3 = state and Color3.fromRGB(0, 200, 150) or Color3.fromRGB(20, 20, 40)
+        btn.BackgroundTransparency = state and 0.2 or 0.5
+        
+        -- อนิเมชั่นกด
+        local scale = Instance.new("UIScale")
+        scale.Parent = btn
+        TweenService:Create(scale, TweenInfo.new(0.1), {Scale = 0.95}):Play()
+        task.wait(0.1)
+        TweenService:Create(scale, TweenInfo.new(0.2, Enum.EasingStyle.Back), {Scale = 1}):Play()
+        task.wait(0.2)
+        scale:Destroy()
+    end)
+    
+    return btn
+end
+
+-- สร้างปุ่ม
+CreateToggleButton("Speed", 155, function(s) Settings.SpeedEnabled = s end)
+CreateToggleButton("ESP", 220, function(s) Settings.ESPEnabled = s end)
+
+-- ============================================
+-- แถบสถานะ
+-- ============================================
+local StatusBar = Instance.new("Frame")
+StatusBar.Size = UDim2.new(0.9, 0, 0, 35)
+StatusBar.Position = UDim2.new(0.05, 0, 1, -45)
+StatusBar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+StatusBar.BackgroundTransparency = 0.88
+StatusBar.BorderSizePixel = 0
+StatusBar.ZIndex = 3
+StatusBar.Parent = MainFrame
+
+local statusCorner = Instance.new("UICorner")
+statusCorner.CornerRadius = UDim.new(0, 10)
+statusCorner.Parent = StatusBar
+
+local StatusText = Instance.new("TextLabel")
+StatusText.Size = UDim2.new(1, 0, 1, 0)
+StatusText.BackgroundTransparency = 1
+StatusText.Text = "● พร้อมใช้งาน"
+StatusText.TextColor3 = Color3.fromRGB(100, 200, 255)
+StatusText.TextSize = 14
+StatusText.Font = Enum.Font.GothamMedium
+StatusText.TextXAlignment = Enum.TextXAlignment.Center
+StatusText.ZIndex = 4
+StatusText.Parent = StatusBar
+
+-- ============================================
+-- 🔄 ลูปการทำงาน
+-- ============================================
+RunService.RenderStepped:Connect(function()
+    -- Speed
+    if Settings.SpeedEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+        LocalPlayer.Character.Humanoid.WalkSpeed = Settings.WalkSpeedValue
+        StatusText.Text = "🏃 กำลังวิ่ง : " .. Settings.WalkSpeedValue
+        StatusText.TextColor3 = Color3.fromRGB(100, 200, 255)
+    else
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+            if LocalPlayer.Character.Humanoid.WalkSpeed ~= 16 then
+                LocalPlayer.Character.Humanoid.WalkSpeed = 16
+            end
+        end
+        if not Settings.SpeedEnabled then
+            StatusText.Text = "● พร้อมใช้งาน"
+            StatusText.TextColor3 = Color3.fromRGB(100, 200, 255)
+        end
+    end
+    
+    -- ESP
+    if Settings.ESPEnabled then
+        for _, p in pairs(Players:GetPlayers()) do
+            if p ~= LocalPlayer and p.Character and not p.Character:FindFirstChild("NZF_ESP") then
+                local hl = Instance.new("Highlight", p.Character)
+                hl.Name = "NZF_ESP"
+                hl.FillColor = Color3.fromRGB(255, 100, 150)
+                hl.FillTransparency = 0.3
+                hl.OutlineColor = Color3.fromRGB(255, 255, 255)
+                hl.OutlineTransparency = 0
+                hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                hl.Adornee = p.Character
+            end
+        end
+    else
+        for _, p in pairs(Players:GetPlayers()) do
+            if p.Character and p.Character:FindFirstChild("NZF_ESP") then
+                p.Character.NZF_ESP:Destroy()
+            end
+        end
+    end
+end)
+
+-- ============================================
+-- เปิด/ปิด UI
+-- ============================================
+local isOpen = false
+
+ToggleBtn.MouseButton1Click:Connect(function()
+    isOpen = not isOpen
+    
+    if isOpen then
+        MainFrame.Visible = true
+        MainFrame.Size = UDim2.new(0, 0, 0, 0)
+        MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+        MainFrame.BackgroundTransparency = 0.5
+        
+        for i = 1, 20 do
+            local progress = i / 20
+            local ease = 1 - (1 - progress) * (1 - progress)
+            local sizeX = 360 * ease
+            local sizeY = 400 * ease
+            MainFrame.Size = UDim2.new(0, sizeX, 0, sizeY)
+            MainFrame.BackgroundTransparency = 0.5 - (0.2 * ease)
+            MainFrame.Position = UDim2.new(0.5, -(180 * ease), 0.5, -(200 * ease))
+            wait(0.015)
+        end
+        
+        MainFrame.Size = UDim2.new(0, 360, 0, 400)
+        MainFrame.BackgroundTransparency = 0.3
+        MainFrame.Position = UDim2.new(0.5, -180, 0.5, -200)
+        
+        animateTitle()
+        
+        TweenService:Create(ToggleBtn, TweenInfo.new(0.4), {Rotation = 180}):Play()
+        TweenService:Create(ring, TweenInfo.new(0.4), {
+            ImageColor3 = Color3.fromRGB(255, 100, 150)
+        }):Play()
+        
+    else
+        for i = 1, 15 do
+            local progress = i / 15
+            local sizeX = 360 - (360 * progress)
+            local sizeY = 400 - (400 * progress)
+            MainFrame.Size = UDim2.new(0, sizeX, 0, sizeY)
+            MainFrame.BackgroundTransparency = 0.3 + (0.2 * progress)
+            MainFrame.Position = UDim2.new(0.5, -(180 * (1 - progress)), 0.5, -(200 * (1 - progress)))
+            wait(0.015)
+        end
+        
+        MainFrame.Visible = false
+        
+        TweenService:Create(ToggleBtn, TweenInfo.new(0.4), {Rotation = 0}):Play()
+        TweenService:Create(ring, TweenInfo.new(0.4), {
+            ImageColor3 = Color3.fromRGB(200, 200, 220)
+        }):Play()
+    end
+end)
+
+-- ============================================
+-- วงแหวนหมุนตลอด
+-- ============================================
+RunService.Heartbeat:Connect(function(dt)
+    ring.Rotation = (ring.Rotation or 0) + dt * 40
+end)

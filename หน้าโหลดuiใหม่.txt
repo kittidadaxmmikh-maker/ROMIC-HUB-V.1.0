@@ -1,0 +1,202 @@
+-- ============================================
+-- NZF LOADER ONLY - MOBILE
+-- ============================================
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- ============================================
+-- สร้าง GUI
+-- ============================================
+local gui = Instance.new("ScreenGui")
+gui.Name = "NZF_Loader"
+gui.Parent = player.PlayerGui
+gui.ResetOnSpawn = false
+
+-- ============================================
+-- หนาโหลด (Loader)
+-- ============================================
+local loader = Instance.new("Frame")
+loader.Name = "Loader"
+loader.Size = UDim2.new(1, 0, 1, 0)
+loader.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+loader.BackgroundTransparency = 0.85
+loader.BorderSizePixel = 0
+loader.ZIndex = 100
+loader.Parent = gui
+
+-- ============================================
+-- ขอความ NZF (เดงทละตว)
+-- ============================================
+local titleFrame = Instance.new("Frame")
+titleFrame.Size = UDim2.new(0, 300, 0, 120)
+titleFrame.Position = UDim2.new(0.5, -150, 0.25, -60)
+titleFrame.BackgroundTransparency = 1
+titleFrame.ZIndex = 101
+titleFrame.Parent = loader
+
+local letters = {"N", "Z", "F"}
+local letterLabels = {}
+
+for i, letter in ipairs(letters) do
+    local lbl = Instance.new("TextLabel")
+    lbl.Size = UDim2.new(0, 80, 1, 0)
+    lbl.Position = UDim2.new(0, (i-1) * 100, 0, 0)
+    lbl.BackgroundTransparency = 1
+    lbl.Text = letter
+    lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+    lbl.TextSize = 80
+    lbl.Font = Enum.Font.GothamBold
+    lbl.TextScaled = true
+    lbl.ZIndex = 101
+    lbl.Parent = titleFrame
+    lbl.Visible = false
+    letterLabels[i] = lbl
+end
+
+-- ============================================
+-- หลอดโหลด
+-- ============================================
+local loadFrame = Instance.new("Frame")
+loadFrame.Size = UDim2.new(0, 350, 0, 14)
+loadFrame.Position = UDim2.new(0.5, -175, 0.55, 0)
+loadFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+loadFrame.BackgroundTransparency = 0.9
+loadFrame.BorderSizePixel = 0
+loadFrame.ZIndex = 101
+loadFrame.Parent = loader
+
+local loadCorner = Instance.new("UICorner")
+loadCorner.CornerRadius = UDim.new(1, 0)
+loadCorner.Parent = loadFrame
+
+local fill = Instance.new("Frame")
+fill.Size = UDim2.new(0, 0, 1, 0)
+fill.BackgroundColor3 = Color3.fromRGB(100, 200, 255)
+fill.BackgroundTransparency = 0
+fill.BorderSizePixel = 0
+fill.ZIndex = 102
+fill.Parent = loadFrame
+
+local fillCorner = Instance.new("UICorner")
+fillCorner.CornerRadius = UDim.new(1, 0)
+fillCorner.Parent = fill
+
+-- ============================================
+-- ตัวเลขเปอรเซนต
+-- ============================================
+local percentLabel = Instance.new("TextLabel")
+percentLabel.Size = UDim2.new(0, 100, 0, 50)
+percentLabel.Position = UDim2.new(0.5, -50, 0.62, 0)
+percentLabel.BackgroundTransparency = 1
+percentLabel.Text = "0%"
+percentLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+percentLabel.TextSize = 30
+percentLabel.Font = Enum.Font.GothamBold
+percentLabel.ZIndex = 101
+percentLabel.Parent = loader
+
+-- ============================================
+-- ขอความใตหลอด
+-- ============================================
+local subText = Instance.new("TextLabel")
+subText.Size = UDim2.new(0, 300, 0, 30)
+subText.Position = UDim2.new(0.5, -150, 0.69, 0)
+subText.BackgroundTransparency = 1
+subText.Text = "กำลังโหลดระบบ..."
+subText.TextColor3 = Color3.fromRGB(180, 180, 210)
+subText.TextSize = 16
+subText.Font = Enum.Font.Gotham
+subText.ZIndex = 101
+subText.Parent = loader
+
+-- ============================================
+-- ฟังกชนโหลด
+-- ============================================
+local function startLoader()
+    for i, lbl in ipairs(letterLabels) do
+        lbl.Visible = true
+        lbl.TextTransparency = 1
+        lbl.Position = UDim2.new(0, (i-1) * 100, 0, -30)
+        
+        for t = 1, 15 do
+            local progress = t / 15
+            lbl.TextTransparency = 1 - progress
+            lbl.Position = UDim2.new(0, (i-1) * 100, 0, -30 + (30 * progress))
+            wait(0.02)
+        end
+        
+        lbl.TextTransparency = 0
+        lbl.Position = UDim2.new(0, (i-1) * 100, 0, 0)
+        wait(0.15)
+    end
+    
+    local duration = 3
+    local startTime = tick()
+    
+    while tick() - startTime < duration do
+        local elapsed = tick() - startTime
+        local progress = elapsed / duration
+        local percent = math.floor(progress * 100)
+        
+        fill.Size = UDim2.new(progress, 0, 1, 0)
+        percentLabel.Text = percent .. "%"
+        
+        if percent < 30 then
+            subText.Text = "กำลังเริ่มต้นระบบ..."
+            fill.BackgroundColor3 = Color3.fromRGB(100, 200, 255)
+        elseif percent < 60 then
+            subText.Text = "กำลังโหลดไฟล์..."
+            fill.BackgroundColor3 = Color3.fromRGB(200, 100, 255)
+        elseif percent < 90 then
+            subText.Text = "กำลังเตรียม UI..."
+            fill.BackgroundColor3 = Color3.fromRGB(255, 100, 200)
+        else
+            subText.Text = "เกือบเสร็จ!"
+            fill.BackgroundColor3 = Color3.fromRGB(100, 255, 200)
+        end
+        
+        wait(0.05)
+    end
+    
+    fill.Size = UDim2.new(1, 0, 1, 0)
+    percentLabel.Text = "100%"
+    subText.Text = "โหลดสำเร็จ!"
+    
+    wait(0.5)
+    
+    for i = 1, 25 do
+        local progress = i / 25
+        loader.BackgroundTransparency = 0.85 + (0.15 * progress)
+        loader.Position = UDim2.new(0, 0, 0, -15 * progress)
+        wait(0.02)
+    end
+    
+    loader.Visible = false
+    
+    -- ============================================
+    -- loadstring อัตโนมัติ 1 ครั้ง
+    -- ============================================    
+    
+    -- local success, result = pcall(function()
+    --     loadstring(game:HttpGet("ใส่ลิงก์ตรงนี้"))()
+    -- end)
+    -- 
+    -- if success then
+    --  
+    -- else
+    --   
+    -- end
+    
+    print("ระบบพร้อมใช้งาน")
+end
+
+-- ============================================
+-- เริ่มทำงาน
+-- ============================================
+wait(0.5)
+startLoader()
+
+print("==========================================")
+print("NZF LOADER")
+print("==========================================")
